@@ -1,5 +1,9 @@
-
 import { Component } from '@angular/core';
+
+interface Task {
+  title: string;
+  completed: boolean;
+}
 
 @Component({
   selector: 'app-todo-list',
@@ -9,7 +13,7 @@ import { Component } from '@angular/core';
 export class TodoListComponent {
   editableId: number | null = null;
   newTask: string = '';
-  tasks: any[] = [
+  tasks: Task[] = [
     {
       title: 'Crear la lista de tareas',
       completed: true,
@@ -24,35 +28,48 @@ export class TodoListComponent {
     },
   ];
 
-  addTask() {
-    const task = {
+  searchTerm: string = '';
+
+  get filteredTasks(): Task[] {
+    return this.tasks.filter((task) =>
+      task.title.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
+  addTask(): void {
+    const task: Task = {
       title: this.newTask,
       completed: false,
-    }
+    };
     this.tasks.push(task);
     this.newTask = '';
   }
 
-  updateTask(task: any, title: string) {
+  updateTask(task: Task, title: string): void {
     const index = this.tasks.indexOf(task);
-    const updateTask = {
-      title,
-      completed: task.completed
+    if (index !== -1) {
+      this.tasks[index].title = title;
     }
-    this.tasks[index] = { ...task, ...updateTask };
   }
 
-  deleteTask(task: any) {
+  deleteTask(task: Task): void {
     const index = this.tasks.indexOf(task);
-    this.tasks.splice(index, 1);
+    if (index !== -1) {
+      this.tasks.splice(index, 1);
+    }
   }
 
   startEdit(id: number): void {
     this.editableId = id;
   }
 
-  stopEdit(task: any, title: string): void {
+  stopEdit(task: Task, title: string): void {
     this.editableId = null;
     this.updateTask(task, title);
+  }
+
+  filterTasks(): void {
+    // Esta función se llama cuando se cambia el término de búsqueda
+    // No es necesario agregar ningún código aquí, ya que la lógica de filtrado se maneja en la propiedad calculada `filteredTasks`.
   }
 }

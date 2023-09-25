@@ -4,7 +4,7 @@ import { Task } from '../../interfaces/task.interface';
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
-  styleUrls: ['./task-list.component.css']
+  styleUrls: ['./task-list.component.css'],
 })
 export class TaskListComponent {
   @Output()
@@ -31,5 +31,4 @@ export class TaskListComponent {
     const changes: Task = { title, completed: task.completed };
     this.editTask.emit({ task, changes });
   }
-
 }

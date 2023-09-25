@@ -1,10 +1,5 @@
 import { Component } from '@angular/core';
 
-interface Task {
-  title: string;
-  completed: boolean;
-}
-
 @Component({
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
@@ -12,8 +7,9 @@ interface Task {
 })
 export class TodoListComponent {
   editableId: number | null = null;
-  newTask: string = '';
-  tasks: Task[] = [
+  newTask = '';
+
+  tasks: any[] = [
     {
       title: 'Crear la lista de tareas',
       completed: true,
@@ -23,53 +19,51 @@ export class TodoListComponent {
       completed: true,
     },
     {
+      title: 'Agregar estilos y validaciones',
+      completed: false,
+    },
+    {
+      title: 'Elaborar el flujo y animaciones',
+      completed: false,
+    },
+    {
       title: 'Desplegar el proyecto en la web',
       completed: false,
     },
   ];
 
-  searchTerm: string = '';
-
-  get filteredTasks(): Task[] {
-    return this.tasks.filter((task) =>
-      task.title.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-  }
-
-  addTask(): void {
-    const task: Task = {
+  addTask() {
+    const newTask = {
       title: this.newTask,
       completed: false,
     };
-    this.tasks.push(task);
-    this.newTask = '';
+    this.tasks.push(newTask);
   }
 
-  updateTask(task: Task, title: string): void {
+  updateTask(task: any, title: string) {
     const index = this.tasks.indexOf(task);
-    if (index !== -1) {
-      this.tasks[index].title = title;
+    const updateTask = {
+      title,
+      completed: task.completed
     }
+    this.tasks[index] = { ...task, ...updateTask };
   }
 
-  deleteTask(task: Task): void {
+  deleteTask(task: any) {
     const index = this.tasks.indexOf(task);
-    if (index !== -1) {
-      this.tasks.splice(index, 1);
-    }
+    this.tasks.splice(index, 1);
+  }
+
+  changeModel() {
+    console.log(this.tasks);
   }
 
   startEdit(id: number): void {
     this.editableId = id;
   }
 
-  stopEdit(task: Task, title: string): void {
+  stopEdit(task: any, title: string): void {
     this.editableId = null;
     this.updateTask(task, title);
-  }
-
-  filterTasks(): void {
-    // Esta función se llama cuando se cambia el término de búsqueda
-    // No es necesario agregar ningún código aquí, ya que la lógica de filtrado se maneja en la propiedad calculada `filteredTasks`.
   }
 }
